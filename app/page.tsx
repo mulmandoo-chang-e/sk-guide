@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { db } from "./firebase";
+import { ref, set, onValue } from "firebase/database";
 
 export default function SevenKnightsGuide() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -8,6 +10,7 @@ export default function SevenKnightsGuide() {
   const [activeTab, setActiveTab] = useState(0);
 
   const [tabs, setTabs] = useState(['덱 1', '덱 2', '덱 3', '덱 4', '덱 5']);
+  const [guideData, setGuideData] = useState<any>({});
 
   useEffect(() => {
     const savedAdmin = localStorage.getItem('sk-admin');
@@ -26,6 +29,18 @@ export default function SevenKnightsGuide() {
     localStorage.setItem('sk-tabs', JSON.stringify(tabs));
   }, [tabs]);
 
+  useEffect(() => {
+    const guideRef = ref(db, "guideData");
+  
+    onValue(guideRef, (snapshot) => {
+      const data = snapshot.val();
+  
+      if (data) {
+        setGuideData(data);
+      }
+    });
+  }, []);
+
   const login = () => {
     if (password === '1234') {
       setIsAdmin(true);
@@ -36,6 +51,11 @@ export default function SevenKnightsGuide() {
   const logout = () => {
     setIsAdmin(false);
     localStorage.removeItem('sk-admin');
+  };
+
+  const saveData = async () => {
+    await set(ref(db, "guideData"), guideData);
+    alert("저장 완료");
   };
 
   const addDeck = () => {
@@ -319,10 +339,7 @@ export default function SevenKnightsGuide() {
           </Editable>
 
           <button
-            onClick={() => {
-              localStorage.setItem('sk-save', 'saved');
-              alert('저장 완료');
-            }}
+            onClick={saveData}
             className="bg-red-700 px-3 py-1 rounded-md text-[12px] font-bold"
           >
             저장
