@@ -313,6 +313,7 @@ export default function Page() {
             skillIndex: number
           ) => (
             <SkillBox
+  key={skillIndex}
             darkMode={darkMode}
           
           
@@ -592,6 +593,7 @@ export default function Page() {
               skillIndex: number
             ) => (
               <SkillBox
+  key={skillIndex}
   darkMode={darkMode}
 
   defense
