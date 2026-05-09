@@ -1,12 +1,18 @@
 export type DeckData = {
-    title: string;
-    tip: string;
-  
-    heroes: string[];
-    pet: string;
-  
-    skills: string[];
-  };
+  title: string;
+
+  tip: string;
+
+  heroes: string[];
+
+  heroDescriptions: string[];
+
+  skills: string[];
+
+  skillDescriptions: string[];
+
+  pet: string;
+};
   
   export type GuideData = {
     logo: string;
