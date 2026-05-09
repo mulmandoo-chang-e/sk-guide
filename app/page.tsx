@@ -330,15 +330,15 @@ export default function Page() {
   
     if (
       !next.attack[index]
-        .heroDescriptions
+        .skillDescriptions
     ) {
       next.attack[index]
-        .heroDescriptions =
+        .skillDescriptions =
           ["", "", "", ""];
     }
   
     next.attack[index]
-      .heroDescriptions[skillIndex] = v;
+      .skillDescriptions[skillIndex] = v;
   
     setGuideData(next);
   }}
@@ -611,15 +611,15 @@ export default function Page() {
   
     if (
       !next.defense[index]
-        .heroDescriptions
+        .skillDescriptions
     ) {
       next.defense[index]
-        .heroDescriptions =
+        .skillDescriptions =
           ["", "", "", ""];
     }
   
     next.defense[index]
-      .heroDescriptions[skillIndex] = v;
+      .skillDescriptions[skillIndex] = v;
   
     setGuideData(next);
   }}
