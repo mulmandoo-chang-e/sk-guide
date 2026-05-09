@@ -140,17 +140,6 @@ const defaultGuideData: GuideData = {
       ),
     },
   ],
-
-  attack: Array.from(
-    { length: 9 },
-    (_, i) =>
-      createDeck(`공격덱 ${i + 1}`)
-  ),
-
-  defense: [
-    createDeck("방어덱 1"),
-    createDeck("방어덱 2"),
-  ],
 };
 
 export default function Page() {
