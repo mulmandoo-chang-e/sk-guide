@@ -343,7 +343,7 @@ export default function Page() {
     setGuideData(next);
   }}
 
-  darkMode={darkMode}
+
               onChange={(url) => {
                 const next = {
                   ...guideData,
@@ -624,7 +624,7 @@ export default function Page() {
     setGuideData(next);
   }}
 
-  darkMode={darkMode}
+  
                 onChange={(url) => {
                   const next = {
                     ...guideData,
