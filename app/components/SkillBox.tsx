@@ -21,6 +21,8 @@ type Props = {
     value: string
   ) => void;
 
+  isAdmin?: boolean;
+
   darkMode: boolean;
 
   defense?: boolean;
@@ -32,6 +34,8 @@ export default function SkillBox({
 
   description,
   onDescriptionChange,
+
+  isAdmin,
 
   darkMode,
 
@@ -103,12 +107,14 @@ ${
           </span>
         )}
 
+{isAdmin && (
         <input
           type="file"
           accept="image/*"
           className="hidden"
           onChange={uploadImage}
         />
+)}
       </label>
 
       <div className="h-[12px] flex items-center justify-center">

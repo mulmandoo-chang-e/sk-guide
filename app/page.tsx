@@ -180,7 +180,7 @@ export default function Page() {
         const data = snapshot.val();
 
         if (data) {
-          // setGuideData(data);
+          setGuideData(data);
         }
       }
     );
@@ -193,13 +193,13 @@ export default function Page() {
         "sk-admin"
       );
 
-    if (saved === "true") {
+    if (false) {
       setIsAdmin(true);
     }
   }, []);
 
   const login = () => {
-    if (password === "1234") {
+    if (password === "991127") {
       setIsAdmin(true);
 
       localStorage.setItem(
@@ -314,6 +314,7 @@ export default function Page() {
   `}
     >
       <Editable
+      disabled={!isAdmin}
         value={deck.title}
         onChange={(v) => {
           const next = {
@@ -352,6 +353,8 @@ export default function Page() {
     ) => (
       <HeroBox
         key={heroIndex}
+
+        isAdmin={isAdmin}
 
         image={hero}
 
@@ -403,6 +406,7 @@ export default function Page() {
         <div className="pt-[10px]">
           <HeroBox darkMode={darkMode}
             pet
+            isAdmin={isAdmin}
             image={deck.pet}
             onChange={(url) => {
               const next = {
@@ -435,6 +439,7 @@ export default function Page() {
   key={skillIndex}
             darkMode={darkMode}
           
+            isAdmin={isAdmin}
           
             image={skill}
 
@@ -521,6 +526,7 @@ export default function Page() {
         </div>
 
         <Editable
+        disabled={!isAdmin}
           value={deck.tip}
           onChange={(v) => {
             const next = {
@@ -602,6 +608,7 @@ export default function Page() {
         "
       >
         <Editable
+        disabled={!isAdmin}
           value={deck.title}
           onChange={(v) => {
             const next = {
@@ -642,6 +649,8 @@ export default function Page() {
       defense
 
         key={heroIndex}
+
+        isAdmin={isAdmin}
 
         image={hero}
 
@@ -694,6 +703,7 @@ export default function Page() {
             <HeroBox darkMode={darkMode}
               pet
               defense
+              isAdmin={isAdmin}
               image={deck.pet}
               onChange={(url) => {
                 const next = {
@@ -727,6 +737,8 @@ export default function Page() {
   darkMode={darkMode}
 
   defense
+
+  isAdmin={isAdmin}
 
   image={skill}
 
@@ -820,6 +832,7 @@ export default function Page() {
         </div>
 
         <Editable
+        disabled={!isAdmin}
           value={deck.tip}
           onChange={(v) => {
             const next = {
@@ -876,88 +889,7 @@ export default function Page() {
   overflow-hidden
 `}
     >
-      {!isAdmin && (
-        <div
-          className="
-            fixed inset-0
-
-            bg-black/90
-
-            z-50
-
-            flex items-center justify-center
-
-            p-4
-          "
-        >
-          <div
-            className="
-              border border-red-700
-              rounded-xl
-
-              bg-[#111]
-
-              p-6
-
-              w-full
-              max-w-[320px]
-
-              flex flex-col gap-4
-            "
-          >
-            <div
-              className="
-                text-red-500
-                text-[24px]
-                font-bold
-
-                text-center
-              "
-            >
-              관리자 로그인
-            </div>
-
-            <input
-              type="password"
-              placeholder="비밀번호 입력"
-              value={password}
-              onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
-              }
-              className="
-                bg-black
-
-                border border-red-700
-                rounded-lg
-
-                px-3 py-2
-
-                outline-none
-              "
-            />
-
-            <button
-              onClick={login}
-              className="
-                bg-red-700
-                hover:bg-red-600
-
-                transition
-
-                rounded-lg
-
-                py-2
-
-                font-bold
-              "
-            >
-              로그인
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       {/* Header */}
 
@@ -1034,6 +966,7 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
               </div>
             )}
 
+{isAdmin && (
             <input
               type="file"
               accept="image/*"
@@ -1074,9 +1007,11 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
                 });
               }}
             />
+)}
           </label>
 
           <Editable
+          disabled={!isAdmin}
             value={guideData.title}
             onChange={(v) =>
               setGuideData({
@@ -1102,6 +1037,7 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
           "
         >
           <Editable
+          disabled={!isAdmin}
             value={guideData.nickname}
             onChange={(v) =>
               setGuideData({
@@ -1160,73 +1096,144 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
   `}
 >
   {darkMode ? "LIGHT" : "DARK"}
-</button>
+  </button>
 
-          <button
-            onClick={saveData}
-            className={`
-  px-3 py-1
+  {isAdmin ? (
+  <>
+    <button
+      onClick={saveData}
+      className={`
+        px-3 py-1
 
-  rounded-md
+        rounded-md
 
-  text-[12px]
+        text-[12px]
 
-  font-bold
+        font-bold
 
-  transition-all duration-200
+        transition-all duration-200
 
-  ${
-    darkMode
-      ? `
-        bg-red-700
+        ${
+          darkMode
+            ? `
+              bg-red-700
 
-        text-white
-      `
-      : `
-        bg-blue-600
+              text-white
+            `
+            : `
+              bg-blue-600
 
-        text-white
-      `
-  }
-`}
-          >
-            저장
-          </button>
+              text-white
+            `
+        }
+      `}
+    >
+      저장
+    </button>
 
-          <button
-            onClick={logout}
-            className={`
-  px-3 py-1
+    <button
+      onClick={logout}
+      className={`
+        px-3 py-1
 
-  rounded-md
+        rounded-md
 
-  text-[12px]
+        text-[12px]
 
-  font-bold
+        font-bold
 
-  transition-all duration-200
+        transition-all duration-200
 
-  ${
-    darkMode
-      ? `
-        border border-red-700
+        ${
+          darkMode
+            ? `
+              border border-red-700
 
-        bg-black
+              bg-black
 
-        text-white
-      `
-      : `
-        border border-gray-300
+              text-white
+            `
+            : `
+              border border-gray-300
 
-        bg-white
+              bg-white
 
-        text-gray-700
-      `
-  }
-`}
-          >
-            로그아웃
-          </button>
+              text-gray-700
+            `
+        }
+      `}
+    >
+      로그아웃
+    </button>
+  </>
+) : (
+  <>
+    <input
+      type="password"
+      placeholder="관리자 비밀번호"
+      value={password}
+      onChange={(e) =>
+        setPassword(e.target.value)
+      }
+      className={`
+        px-3 py-1
+
+        rounded-md
+
+        text-[12px]
+
+        border
+
+        ${
+          darkMode
+            ? `
+              bg-black
+
+              border-red-700
+
+              text-white
+            `
+            : `
+              bg-white
+
+              border-gray-300
+
+              text-black
+            `
+        }
+      `}
+    />
+
+    <button
+      onClick={login}
+      className={`
+        px-3 py-1
+
+        rounded-md
+
+        text-[12px]
+
+        font-bold
+
+        ${
+          darkMode
+            ? `
+              bg-red-700
+
+              text-white
+            `
+            : `
+              bg-blue-600
+
+              text-white
+            `
+        }
+      `}
+    >
+      로그인
+    </button>
+  </>
+)}
         </div>
       </div>
 
@@ -1322,6 +1329,7 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
               `}
             >
               <Editable
+              disabled={!isAdmin}
   value={tab.name}
   onChange={(v) => {
     const next = {
@@ -1344,49 +1352,51 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
           )
         )}
 
-<button
-  onClick={addTab}
-  className={`
-    rounded-lg
+{isAdmin && (
+  <button
+    onClick={addTab}
+    className={`
+      rounded-lg
 
-    px-4 py-1
+      px-4 py-1
 
-    border
+      border
 
-    text-[14px]
-    font-bold
+      text-[14px]
+      font-bold
 
-    transition-all duration-200
+      transition-all duration-200
 
-    ${
-       darkMode
-  ? `
-    bg-[#0d0d0d]
+      ${
+        darkMode
+          ? `
+            bg-[#0d0d0d]
 
-    border-red-900/70
+            border-red-900/70
 
-    text-white/90
+            text-white/90
 
-    hover:bg-[#171717]
+            hover:bg-[#171717]
 
-    hover:border-red-700/80
-  `
-  : `
-    bg-white
+            hover:border-red-700/80
+          `
+          : `
+            bg-white
 
-    border-blue-200
+            border-blue-200
 
-    text-gray-700
+            text-gray-700
 
-    hover:bg-blue-50
+            hover:bg-blue-50
 
-    hover:border-blue-400
-  `
-    }
-  `}
->
-  +
-</button>
+            hover:border-blue-400
+          `
+      }
+    `}
+  >
+    +
+  </button>
+)}
       </div>
 
       {/* Main */}

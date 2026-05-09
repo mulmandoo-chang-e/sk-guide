@@ -6,12 +6,14 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 };
 
 export default function Editable({
   value,
   onChange,
   className = "",
+  disabled,
 }: Props) {
 
   const [localValue, setLocalValue] = useState(value);
@@ -22,6 +24,8 @@ export default function Editable({
 
   return (
     <input
+    disabled={disabled}
+
       value={localValue}
 
       onChange={(e) => {

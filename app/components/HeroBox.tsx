@@ -18,6 +18,8 @@ type Props = {
   description?: string;
   onDescriptionChange?: (value: string) => void;
 
+  isAdmin?: boolean;
+
   darkMode: boolean;
 
   pet?: boolean;
@@ -30,6 +32,8 @@ export default function HeroBox({
 
   description,
   onDescriptionChange,
+
+  isAdmin,
 
   darkMode,
 
@@ -108,12 +112,14 @@ ${
           </span>
         )}
 
+{isAdmin && (
         <input
           type="file"
           accept="image/*"
           className="hidden"
           onChange={uploadImage}
         />
+)}
       </label>
 
       <div className="h-[12px] flex items-center justify-center">
