@@ -146,10 +146,8 @@ export default function Page() {
       ...guideData,
 
       tabs: [
-        ...guideData.tabs,bg-black
-        `덱 ${
-          guideData.tabs.length + 1
-        }`,
+        ...guideData.tabs,
+        `덱 ${guideData.tabs.length + 1}`,
       ],
     });
   };
@@ -624,7 +622,7 @@ export default function Page() {
     setGuideData(next);
   }}
 
-  
+
                 onChange={(url) => {
                   const next = {
                     ...guideData,
