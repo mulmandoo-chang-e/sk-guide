@@ -15,8 +15,8 @@ type Props = {
 
   onChange: (url: string) => void;
 
-  description: string;
-  onDescriptionChange: (value: string) => void;
+  description?: string;
+  onDescriptionChange?: (value: string) => void;
 
   darkMode: boolean;
 
