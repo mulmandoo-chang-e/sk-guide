@@ -18,12 +18,18 @@ import {
 
 const createDeck = (title: string) => ({
   title,
+
   tip: "",
 
-  heroes: ["", "", ""],
+  heroes: ["", "", "", ""],
+
+  heroDescriptions: ["", "", "", ""],
+
   pet: "",
 
   skills: ["", "", ""],
+
+  skillDescriptions: ["", "", ""],
 });
 
 const defaultGuideData: GuideData = {
@@ -67,6 +73,9 @@ export default function Page() {
 
   const [password, setPassword] =
     useState("");
+
+  const [darkMode, setDarkMode] =
+    useState(false);
 
   /* Firebase Load */
   useEffect(() => {
@@ -137,7 +146,7 @@ export default function Page() {
       ...guideData,
 
       tabs: [
-        ...guideData.tabs,
+        ...guideData.tabs,bg-black
         `덱 ${
           guideData.tabs.length + 1
         }`,
@@ -151,16 +160,45 @@ export default function Page() {
     index,
   }: any) => (
     <div
-      className="
-        border border-red-700
-        rounded-xl
+    className={`
+  relative overflow-hidden
 
-        bg-black
+  rounded-xl
 
-        p-3
+  p-4
 
-        flex flex-col gap-4
-      "
+  flex flex-col
+
+  gap-4
+
+  transition-all duration-200
+
+  ${
+    darkMode
+        ? `
+        bg-[linear-gradient(to_bottom,#181818,#0f0f0f)]
+
+        shadow-[0_0_25px_rgba(255,0,0,0.08)]
+        
+        backdrop-blur-md
+  
+          border border-red-700/60
+  
+          shadow-[0_0_30px_rgba(120,0,0,0.16)]
+        `
+        : `
+        bg-[linear-gradient(to_bottom,#ffffff,#f3f8ff)]
+
+        shadow-[0_4px_18px_rgba(59,130,246,0.08)]
+        
+        backdrop-blur-md
+  
+          border border-gray-300
+  
+          shadow-sm
+        `
+    }
+  `}
     >
       <Editable
         value={deck.title}
@@ -174,11 +212,16 @@ export default function Page() {
 
           setGuideData(next);
         }}
-        className="
-          text-red-500
-          text-[22px]
-          font-bold
-        "
+        className={`
+  font-bold
+  text-[22px]
+
+  ${
+    darkMode
+      ? "text-red-500"
+      : "text-blue-600"
+  }
+`}
       />
 
       <div
@@ -188,38 +231,59 @@ export default function Page() {
         "
       >
         <div className="flex gap-3">
-          {deck.heroes.map(
-            (
-              hero: string,
-              heroIndex: number
-            ) => (
-              <HeroBox
-                key={heroIndex}
-                image={hero}
-                onChange={(
-                  url
-                ) => {
-                  const next = {
-                    ...guideData,
-                  };
+  {deck.heroes.map(
+    (
+      hero: string,
+      heroIndex: number
+    ) => (
+      <HeroBox
+        key={heroIndex}
 
-                  next.attack[
-                    index
-                  ].heroes[
-                    heroIndex
-                  ] = url;
+        image={hero}
 
-                  setGuideData(
-                    next
-                  );
-                }}
-              />
-            )
-          )}
-        </div>
+        description={
+          deck.heroDescriptions?.[heroIndex] || ""
+        }
+
+        onDescriptionChange={(v) => {
+          const next = {
+            ...guideData,
+          };
+        
+          if (
+            !next.attack[index]
+              .heroDescriptions
+          ) {
+            next.attack[index]
+              .heroDescriptions =
+                ["", "", "", ""];
+          }
+        
+          next.attack[index]
+            .heroDescriptions[heroIndex] = v;
+        
+          setGuideData(next);
+        }}
+
+        darkMode={darkMode}
+
+        onChange={(url) => {
+          const next = {
+            ...guideData,
+          };
+
+          next.attack[index]
+            .heroes[heroIndex] = url;
+
+          setGuideData(next);
+        }}
+      />
+    )
+  )}
+</div>
 
         <div className="pt-[10px]">
-          <HeroBox
+          <HeroBox darkMode={darkMode}
             pet
             image={deck.pet}
             onChange={(url) => {
@@ -249,8 +313,36 @@ export default function Page() {
             skillIndex: number
           ) => (
             <SkillBox
-              key={skillIndex}
-              image={skill}
+            darkMode={darkMode}
+          
+          
+            image={skill}
+
+  description={
+    deck.skillDescriptions?.[skillIndex] || ""
+  }
+
+  onDescriptionChange={(v) => {
+    const next = {
+      ...guideData,
+    };
+  
+    if (
+      !next.attack[index]
+        .heroDescriptions
+    ) {
+      next.attack[index]
+        .heroDescriptions =
+          ["", "", "", ""];
+    }
+  
+    next.attack[index]
+      .heroDescriptions[skillIndex] = v;
+  
+    setGuideData(next);
+  }}
+
+  darkMode={darkMode}
               onChange={(url) => {
                 const next = {
                   ...guideData,
@@ -270,14 +362,27 @@ export default function Page() {
       </div>
 
       <div
-        className="
-          border border-red-700
-          rounded-lg
-
-          bg-[#111]
-
-          p-3
-        "
+        className={`
+        rounded-lg
+      
+        p-3
+      
+        transition-all duration-200
+      
+        ${
+          darkMode
+            ? `
+              bg-[#111]
+      
+              border border-red-700/60
+            `
+            : `
+              bg-[#f8fafc]
+      
+              border border-blue-200
+            `
+        }
+      `}
       >
         <div
           className="
@@ -303,12 +408,18 @@ export default function Page() {
 
             setGuideData(next);
           }}
-          className="
-            text-gray-300
-            text-[12px]
+          className={`
+  ${
+    darkMode
+      ? "text-gray-300"
+      : "text-black"
+  }
 
-            w-full
-          "
+  text-[15px]
+  leading-relaxed
+
+  w-full
+`}
         />
       </div>
     </div>
@@ -320,19 +431,45 @@ export default function Page() {
     index,
   }: any) => (
     <div
-      className="
-        border border-red-700
-        rounded-xl
+    className={`
+    relative overflow-hidden
+  
+    rounded-xl
+  
+    p-4
+  
+    flex flex-col
+  
+    gap-4
+  
+    transition-all duration-200
+  
+    ${
+      darkMode
+          ? `
+          bg-[linear-gradient(to_bottom,#181818,#0f0f0f)]
 
-        bg-black
+          shadow-[0_0_25px_rgba(255,0,0,0.08)]
+          
+          backdrop-blur-md
+    
+            border border-red-700/60
+    
+            shadow-[0_0_30px_rgba(120,0,0,0.16)]
+          `
+          : `
+          bg-[linear-gradient(to_bottom,#ffffff,#f3f8ff)]
 
-        p-4
-
-        flex flex-col
-        justify-between
-
-        h-full
-      "
+          shadow-[0_4px_18px_rgba(59,130,246,0.08)]
+          
+          backdrop-blur-md
+    
+            border border-gray-300
+    
+            shadow-sm
+          `
+      }
+    `}
     >
       <div
         className="
@@ -351,11 +488,16 @@ export default function Page() {
 
             setGuideData(next);
           }}
-          className="
-            text-red-500
-            text-[28px]
-            font-bold
-          "
+          className={`
+  font-bold
+  text-[28px]
+
+  ${
+    darkMode
+      ? "text-red-500"
+      : "text-blue-600"
+  }
+`}
         />
 
         <div
@@ -364,40 +506,62 @@ export default function Page() {
             flex-wrap
           "
         >
-          <div className="flex gap-4">
-            {deck.heroes.map(
-              (
-                hero: string,
-                heroIndex: number
-              ) => (
-                <HeroBox
-                  key={heroIndex}
-                  defense
-                  image={hero}
-                  onChange={(
-                    url
-                  ) => {
-                    const next = {
-                      ...guideData,
-                    };
+          <div className="flex gap-3">
+  {deck.heroes.map(
+    (
+      hero: string,
+      heroIndex: number
+    ) => (
+      <HeroBox
+      defense
 
-                    next.defense[
-                      index
-                    ].heroes[
-                      heroIndex
-                    ] = url;
+        key={heroIndex}
 
-                    setGuideData(
-                      next
-                    );
-                  }}
-                />
-              )
-            )}
-          </div>
+        image={hero}
+
+        description={
+          deck.heroDescriptions?.[heroIndex] || ""
+        }
+
+        onDescriptionChange={(v) => {
+          const next = {
+            ...guideData,
+          };
+        
+          if (
+            !next.defense[index]
+              .heroDescriptions
+          ) {
+            next.defense[index]
+              .heroDescriptions =
+                ["", "", "", ""];
+          }
+        
+          next.defense[index]
+            .heroDescriptions[heroIndex] = v;
+        
+          setGuideData(next);
+        }}
+
+        darkMode={darkMode}
+
+        onChange={(url) => {
+          const next = {
+            ...guideData,
+          };
+
+          next.defense[index]
+            .heroes[heroIndex] = url;
+
+          setGuideData(next);
+        }}
+      />
+    )
+  )}
+</div>
 
           <div className="pt-[12px]">
-            <HeroBox
+            <HeroBox darkMode={darkMode}
               pet
               defense
               image={deck.pet}
@@ -428,9 +592,37 @@ export default function Page() {
               skillIndex: number
             ) => (
               <SkillBox
-                key={skillIndex}
-                defense
-                image={skill}
+  darkMode={darkMode}
+
+  defense
+
+  image={skill}
+
+  description={
+    deck.skillDescriptions?.[skillIndex] || ""
+  }
+
+  onDescriptionChange={(v) => {
+    const next = {
+      ...guideData,
+    };
+  
+    if (
+      !next.defense[index]
+        .heroDescriptions
+    ) {
+      next.defense[index]
+        .heroDescriptions =
+          ["", "", "", ""];
+    }
+  
+    next.defense[index]
+      .heroDescriptions[skillIndex] = v;
+  
+    setGuideData(next);
+  }}
+
+  darkMode={darkMode}
                 onChange={(url) => {
                   const next = {
                     ...guideData,
@@ -453,17 +645,31 @@ export default function Page() {
       </div>
 
       <div
-        className="
-          border border-red-700
-          rounded-lg
-
-          bg-[#111]
-
-          p-3
-          mt-5
-
-          min-h-[180px]
-        "
+       className={`
+       rounded-lg
+     
+       p-3
+     
+       mt-5
+     
+       min-h-[160px]
+     
+       transition-all duration-200
+     
+       ${
+         darkMode
+           ? `
+             bg-[#111]
+     
+             border border-red-700/60
+           `
+           : `
+             bg-[#f8fafc]
+     
+             border border-blue-200
+           `
+       }
+     `}
       >
         <div
           className="
@@ -489,12 +695,18 @@ export default function Page() {
 
             setGuideData(next);
           }}
-          className="
-            text-gray-300
-            text-[13px]
+          className={`
+  ${
+    darkMode
+      ? "text-gray-300"
+      : "text-black"
+  }
 
-            w-full
-          "
+  text-[24px]
+  leading-relaxed
+
+  w-full
+`}
         />
       </div>
     </div>
@@ -502,19 +714,30 @@ export default function Page() {
 
   return (
     <div
-      className="
-        w-screen h-screen
+    className={`
+  w-screen h-screen
 
-        bg-black
+  ${
+    darkMode
+      ? `
+        bg-[radial-gradient(circle_at_top,rgba(120,0,0,0.15),transparent_35%),linear-gradient(to_bottom,#050505,#0a0a0a,#120808)]
+
         text-white
+      `
+      : `
+    bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.08),transparent_35%),linear-gradient(to_bottom,#f8fbff,#eef4ff,#e9f1ff)]
 
-        p-[8px]
+    text-black
+  `
+  }
 
-        flex flex-col
-        gap-[8px]
+  p-[8px]
 
-        overflow-hidden
-      "
+  flex flex-col
+  gap-[8px]
+
+  overflow-hidden
+`}
     >
       {!isAdmin && (
         <div
@@ -600,21 +823,48 @@ export default function Page() {
       )}
 
       {/* Header */}
-            {/* Header */}
-            <div
-        className="
-          border border-red-700
-          rounded-xl
 
-          px-3 py-2
+<div
+  className={`
+  rounded-xl
 
-          flex items-center justify-between
+  px-3 py-2
 
-          shrink-0
+  flex items-center justify-between
 
-          flex-wrap gap-3
-        "
-      >
+  shrink-0
+
+  flex-wrap gap-3
+
+  transition-all duration-200
+
+  ${
+    darkMode
+      ? `
+        border border-red-700/60
+
+        bg-[linear-gradient(to_bottom,#111111,#050505)]
+
+backdrop-blur-xl
+
+shadow-[0_0_30px_rgba(255,0,0,0.08)]
+
+        text-white
+      `
+      : `
+        border border-gray-300
+
+        bg-white/75
+
+        backdrop-blur-xl
+        
+        shadow-[0_8px_24px_rgba(59,130,246,0.10)]
+
+        text-black
+      `
+  }
+`}
+>
         <div
           className="
             flex items-center gap-3
@@ -722,45 +972,121 @@ export default function Page() {
                 nickname: v,
               })
             }
-            className="
-              text-red-500
-              text-[18px]
-              md:text-[20px]
+            className={`
+  ${
+    darkMode
+      ? "text-red-500"
+      : "text-blue-700"
+  }
 
-              font-bold
+  text-[18px]
+  md:text-[20px]
 
-              w-[120px]
-            "
+  font-bold
+
+  w-[320px]
+`}
           />
+
+<button
+  onClick={() =>
+    setDarkMode(!darkMode)
+  }
+  className={`
+    px-3 py-1
+
+    rounded-md
+
+    text-[12px]
+
+    font-bold
+
+    transition-all duration-200
+
+    ${
+      darkMode
+        ? `
+          bg-[#111]
+
+          border border-red-700
+
+          text-white
+        `
+        : `
+          bg-white
+
+          border border-gray-300
+
+          text-gray-700
+        `
+    }
+  `}
+>
+  {darkMode ? "LIGHT" : "DARK"}
+</button>
 
           <button
             onClick={saveData}
-            className="
-              bg-red-700
+            className={`
+  px-3 py-1
 
-              px-3 py-1
+  rounded-md
 
-              rounded-md
+  text-[12px]
 
-              text-[12px]
-              font-bold
-            "
+  font-bold
+
+  transition-all duration-200
+
+  ${
+    darkMode
+      ? `
+        bg-red-700
+
+        text-white
+      `
+      : `
+        bg-blue-600
+
+        text-white
+      `
+  }
+`}
           >
             저장
           </button>
 
           <button
             onClick={logout}
-            className="
-              border border-red-700
+            className={`
+  px-3 py-1
 
-              px-3 py-1
+  rounded-md
 
-              rounded-md
+  text-[12px]
 
-              text-[12px]
-              font-bold
-            "
+  font-bold
+
+  transition-all duration-200
+
+  ${
+    darkMode
+      ? `
+        border border-red-700
+
+        bg-black
+
+        text-white
+      `
+      : `
+        border border-gray-300
+
+        bg-white
+
+        text-gray-700
+      `
+  }
+`}
           >
             로그아웃
           </button>
@@ -784,14 +1110,21 @@ export default function Page() {
           ) => (
             <button
               key={index}
-              onClick={() =>
-                setActiveTab(
-                  index
-                )
-              }
+              onClick={(e) => {
+                if (
+                  (e.target as HTMLElement).tagName !== "INPUT"
+                ) {
+                  setActiveTab(index);
+                }
+              }}
               className={`
-                border border-red-700
-                rounded-md
+  ${
+    darkMode
+      ? "border border-red-700"
+      : "border border-blue-200"
+  }
+
+  rounded-md
 
                 px-5 py-1
 
@@ -801,32 +1134,122 @@ export default function Page() {
                 shrink-0
 
                 ${
-                  activeTab ===
-                  index
-                    ? "bg-red-700"
-                    : "bg-black"
+                  activeTab === index
+                    ? darkMode
+                      ? `
+                        bg-gradient-to-b
+                        from-red-600
+                        to-red-900
+                
+                        border-red-500
+                
+                        text-white
+                
+                        shadow-[0_0_20px_rgba(180,0,0,0.35)]
+                      `
+                      : `
+                        bg-gradient-to-b
+                        from-blue-500
+                        to-blue-700
+                
+                        border-blue-400
+                
+                        text-white
+                
+                        shadow-[0_0_18px_rgba(59,130,246,0.35)]
+                      `
+                    : darkMode
+                      ? `
+                        bg-[#0d0d0d]
+                
+                        border-red-900/70
+                
+                        text-white/90
+                
+                        hover:bg-[#171717]
+                
+                        hover:border-red-700/80
+                      `
+                      : `
+                        bg-white
+                
+                        border-gray-300
+                
+                        text-gray-700
+                
+                        hover:bg-blue-50
+                
+                        hover:border-blue-300
+                      `
                 }
               `}
             >
-              {tab}
+              <Editable
+  value={tab}
+  onChange={(v) => {
+    const next = {
+      ...guideData,
+    };
+
+    next.tabs[index] = v;
+
+    setGuideData(next);
+  }}
+  className="
+    text-center
+
+    bg-transparent
+
+    w-20
+  "
+/>
             </button>
           )
         )}
 
-        <button
-          onClick={addTab}
-          className="
-            border border-red-700
-            rounded-md
+<button
+  onClick={addTab}
+  className={`
+    rounded-lg
 
-            px-4 py-1
+    px-4 py-1
 
-            text-[15px]
-            font-bold
-          "
-        >
-          +
-        </button>
+    border
+
+    text-[14px]
+    font-bold
+
+    transition-all duration-200
+
+    ${
+       darkMode
+  ? `
+    bg-[#0d0d0d]
+
+    border-red-900/70
+
+    text-white/90
+
+    hover:bg-[#171717]
+
+    hover:border-red-700/80
+  `
+  : `
+    bg-white
+
+    border-blue-200
+
+    text-gray-700
+
+    hover:bg-blue-50
+
+    hover:border-blue-400
+  `
+    }
+  `}
+>
+  +
+</button>
       </div>
 
       {/* Main */}
@@ -875,9 +1298,11 @@ export default function Page() {
             grid
             grid-cols-1
             md:grid-cols-2
-            xl:grid-cols-3
+            lg:grid-cols-3
 
             gap-[10px]
+
+            pr-[4px]
           "
         >
           {guideData.attack.map(

@@ -1,5 +1,7 @@
 "use client";
 
+import Editable from "./Editable";
+
 import {
   ref as storageRef,
   uploadBytes,
@@ -13,6 +15,8 @@ type Props = {
 
   onChange: (url: string) => void;
 
+  darkMode: boolean;
+
   defense?: boolean;
 };
 
@@ -20,11 +24,16 @@ export default function SkillBox({
   image,
   onChange,
 
-  defense = false,
+  description,
+  onDescriptionChange,
+
+  darkMode,
+
+  defense,
 }: Props) {
   const size = defense
-    ? "w-[78px] h-[78px]"
-    : "w-[60px] h-[60px]";
+  ? "w-[85px] h-[85px]"
+  : "w-[68px] h-[68px]";
 
   const uploadImage = async (e: any) => {
     const file = e.target.files?.[0];
@@ -49,9 +58,27 @@ export default function SkillBox({
         className={`
           ${size}
 
-          border border-red-700
-          rounded-md
-          bg-[#111]
+          rounded-lg
+
+transition-all duration-200
+
+${
+  darkMode
+    ? `
+      border border-red-900/70
+
+      bg-[#151515]
+
+      shadow-[0_0_12px_rgba(90,0,0,0.18)]
+    `
+    : `
+      border border-gray-300
+
+      bg-white
+
+      shadow-sm
+    `
+}
 
           overflow-hidden
           cursor-pointer
@@ -78,9 +105,35 @@ export default function SkillBox({
         />
       </label>
 
-      <div className="border border-red-700 text-[9px] px-2 py-[1px]">
-        설명 입력
-      </div>
+      <div className="h-[12px] flex items-center justify-center">
+  <Editable
+    value={description}
+    onChange={onDescriptionChange}
+    className={`
+  text-center
+
+  text-[14px]
+
+  leading-tight
+
+  ${
+    darkMode
+      ? "text-gray-300"
+      : "text-gray-700"
+  }
+
+  w-[60px]
+
+  bg-transparent
+
+  p-0
+  m-0
+
+  border-none
+  outline-none
+`}
+  />
+</div>
     </div>
   );
 }

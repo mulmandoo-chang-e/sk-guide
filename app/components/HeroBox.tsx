@@ -1,5 +1,7 @@
 "use client";
 
+import Editable from "./Editable";
+
 import {
   ref as storageRef,
   uploadBytes,
@@ -13,6 +15,11 @@ type Props = {
 
   onChange: (url: string) => void;
 
+  description: string;
+  onDescriptionChange: (value: string) => void;
+
+  darkMode: boolean;
+
   pet?: boolean;
   defense?: boolean;
 };
@@ -21,15 +28,20 @@ export default function HeroBox({
   image,
   onChange,
 
-  pet = false,
-  defense = false,
+  description,
+  onDescriptionChange,
+
+  darkMode,
+
+  pet,
+  defense,
 }: Props) {
   const size = defense
     ? pet
-      ? "w-[64px] h-[64px]"
+      ? "w-[80px] h-[80px]"
       : "w-[120px] h-[120px]"
     : pet
-    ? "w-[48px] h-[48px]"
+    ? "w-[64px] h-[64px]"
     : "w-[78px] h-[78px]";
 
   const uploadImage = async (e: any) => {
@@ -49,15 +61,35 @@ export default function HeroBox({
     onChange(url);
   };
 
+
+
   return (
     <div className="flex flex-col items-center gap-[4px] shrink-0">
       <label
         className={`
           ${size}
 
-          border border-red-700
-          rounded-md
-          bg-[#111]
+          rounded-lg
+
+transition-all duration-200
+
+${
+  darkMode
+    ? `
+      border border-red-900/70
+
+      bg-[#151515]
+
+      shadow-[0_0_12px_rgba(90,0,0,0.18)]
+    `
+    : `
+      border border-gray-300
+
+      bg-white
+
+      shadow-sm
+    `
+}
 
           overflow-hidden
           cursor-pointer
@@ -84,9 +116,35 @@ export default function HeroBox({
         />
       </label>
 
-      <div className="border border-red-700 text-[9px] px-2 py-[1px]">
-        설명 입력
-      </div>
+      <div className="h-[12px] flex items-center justify-center">
+        <Editable
+  value={description}
+  onChange={onDescriptionChange}
+  className={`
+  text-center
+
+  text-[14px]
+
+  leading-tight
+
+  ${
+    darkMode
+      ? "text-gray-300"
+      : "text-gray-700"
+  }
+
+  w-[60px]
+
+  bg-transparent
+
+  p-0
+  m-0
+
+  border-none
+  outline-none
+`}
+/>
+    </div>
     </div>
   );
 }
