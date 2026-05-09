@@ -14,14 +14,18 @@ export type DeckData = {
   pet: string;
 };
   
-  export type GuideData = {
-    logo: string;
-  
-    title: string;
-    nickname: string;
-  
-    tabs: string[];
-  
+export type GuideData = {
+  logo: string;
+
+  title: string;
+
+  nickname: string;
+
+  tabs: {
+    name: string;
+
     attack: DeckData[];
+
     defense: DeckData[];
-  };
+  }[];
+};
