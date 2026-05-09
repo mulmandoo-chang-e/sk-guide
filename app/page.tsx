@@ -21,9 +21,9 @@ const createDeck = (title: string) => ({
 
   tip: "",
 
-  heroes: ["", "", "", ""],
+  heroes: ["", "", ""],
 
-  heroDescriptions: ["", "", "", ""],
+  heroDescriptions: ["", "", ""],
 
   pet: "",
 
@@ -40,11 +40,105 @@ const defaultGuideData: GuideData = {
   nickname: "지약새",
 
   tabs: [
-    "덱 1",
-    "덱 2",
-    "덱 3",
-    "덱 4",
-    "덱 5",
+    {
+      name: "덱 1",
+
+      attack: Array.from(
+        { length: 9 },
+        (_, i) =>
+          createDeck(
+            `공격덱 ${i + 1}`
+          )
+      ),
+  
+      defense: Array.from(
+        { length: 2 },
+        (_, i) =>
+          createDeck(
+            `방어덱 ${i + 1}`
+          )
+      ),
+    },
+  
+    {
+      name: "덱 2",
+
+      attack: Array.from(
+        { length: 9 },
+        (_, i) =>
+          createDeck(
+            `공격덱 ${i + 1}`
+          )
+      ),
+  
+      defense: Array.from(
+        { length: 2 },
+        (_, i) =>
+          createDeck(
+            `방어덱 ${i + 1}`
+          )
+      ),
+    },
+  
+    {
+      name: "덱 3",
+
+      attack: Array.from(
+        { length: 9 },
+        (_, i) =>
+          createDeck(
+            `공격덱 ${i + 1}`
+          )
+      ),
+  
+      defense: Array.from(
+        { length: 2 },
+        (_, i) =>
+          createDeck(
+            `방어덱 ${i + 1}`
+          )
+      ),
+    },
+  
+    {
+      name: "덱 4",
+
+      attack: Array.from(
+        { length: 9 },
+        (_, i) =>
+          createDeck(
+            `공격덱 ${i + 1}`
+          )
+      ),
+  
+      defense: Array.from(
+        { length: 2 },
+        (_, i) =>
+          createDeck(
+            `방어덱 ${i + 1}`
+          )
+      ),
+    },
+  
+    {
+      name: "덱 5",
+
+      attack: Array.from(
+        { length: 9 },
+        (_, i) =>
+          createDeck(
+            `공격덱 ${i + 1}`
+          )
+      ),
+  
+      defense: Array.from(
+        { length: 2 },
+        (_, i) =>
+          createDeck(
+            `방어덱 ${i + 1}`
+          )
+      ),
+    },
   ],
 
   attack: Array.from(
@@ -68,6 +162,15 @@ export default function Page() {
   const [activeTab, setActiveTab] =
     useState(0);
 
+    useEffect(() => {
+      if (
+        activeTab >=
+        guideData.tabs.length
+      ) {
+        setActiveTab(0);
+      }
+    }, [activeTab, guideData.tabs.length]);
+
   const [isAdmin, setIsAdmin] =
     useState(false);
 
@@ -88,7 +191,7 @@ export default function Page() {
         const data = snapshot.val();
 
         if (data) {
-          setGuideData(data);
+          // setGuideData(data);
         }
       }
     );
@@ -147,9 +250,32 @@ export default function Page() {
 
       tabs: [
         ...guideData.tabs,
-        `덱 ${guideData.tabs.length + 1}`,
+      
+        {
+          name: `덱 ${guideData.tabs.length + 1}`,
+      
+          attack: Array.from(
+            { length: 9 },
+            (_, i) =>
+              createDeck(
+                `공격덱 ${i + 1}`
+              )
+          ),
+      
+          defense: Array.from(
+            { length: 2 },
+            (_, i) =>
+              createDeck(
+                `방어덱 ${i + 1}`
+              )
+          ),
+        },
       ],
     });
+
+    setActiveTab(
+      guideData.tabs.length
+    );
   };
 
   /* Attack Deck */
@@ -205,7 +331,8 @@ export default function Page() {
             ...guideData,
           };
 
-          next.attack[index].title =
+          next.tabs[activeTab]
+          .attack[index].title =
             v;
 
           setGuideData(next);
@@ -249,15 +376,18 @@ export default function Page() {
           };
         
           if (
-            !next.attack[index]
+            !next.tabs[activeTab]
+            .attack[index]
               .heroDescriptions
           ) {
-            next.attack[index]
+            next.tabs[activeTab]
+            .attack[index]
               .heroDescriptions =
                 ["", "", "", ""];
           }
         
-          next.attack[index]
+          next.tabs[activeTab]
+          .attack[index]
             .heroDescriptions[heroIndex] = v;
         
           setGuideData(next);
@@ -270,7 +400,8 @@ export default function Page() {
             ...guideData,
           };
 
-          next.attack[index]
+          next.tabs[activeTab]
+  .attack[index]
             .heroes[heroIndex] = url;
 
           setGuideData(next);
@@ -289,7 +420,8 @@ export default function Page() {
                 ...guideData,
               };
 
-              next.attack[
+              next.tabs[activeTab]
+              .attack[
                 index
               ].pet = url;
 
@@ -327,15 +459,18 @@ export default function Page() {
     };
   
     if (
-      !next.attack[index]
+      !next.tabs[activeTab]
+      .attack[index]
         .skillDescriptions
     ) {
-      next.attack[index]
+      next.tabs[activeTab]
+      .attack[index]
         .skillDescriptions =
           ["", "", "", ""];
     }
   
-    next.attack[index]
+    next.tabs[activeTab]
+    .attack[index]
       .skillDescriptions[skillIndex] = v;
   
     setGuideData(next);
@@ -347,7 +482,8 @@ export default function Page() {
                   ...guideData,
                 };
 
-                next.attack[
+                next.tabs[activeTab]
+                .attack[
                   index
                 ].skills[
                   skillIndex
@@ -402,7 +538,8 @@ export default function Page() {
               ...guideData,
             };
 
-            next.attack[index].tip =
+            next.tabs[activeTab]
+            .attack[index].tip =
               v;
 
             setGuideData(next);
@@ -482,7 +619,8 @@ export default function Page() {
               ...guideData,
             };
 
-            next.defense[index]
+            next.tabs[activeTab]
+  .defense[index]
               .title = v;
 
             setGuideData(next);
@@ -528,15 +666,18 @@ export default function Page() {
           };
         
           if (
-            !next.defense[index]
+            !next.tabs[activeTab]
+            .defense[index]
               .heroDescriptions
           ) {
-            next.defense[index]
+            next.tabs[activeTab]
+            .defense[index]
               .heroDescriptions =
                 ["", "", "", ""];
           }
         
-          next.defense[index]
+          next.tabs[activeTab]
+          .defense[index]
             .heroDescriptions[heroIndex] = v;
         
           setGuideData(next);
@@ -549,7 +690,8 @@ export default function Page() {
             ...guideData,
           };
 
-          next.defense[index]
+          next.tabs[activeTab]
+          .defense[index]
             .heroes[heroIndex] = url;
 
           setGuideData(next);
@@ -569,7 +711,8 @@ export default function Page() {
                   ...guideData,
                 };
 
-                next.defense[
+                next.tabs[activeTab]
+                .defense[
                   index
                 ].pet = url;
 
@@ -608,15 +751,18 @@ export default function Page() {
     };
   
     if (
-      !next.defense[index]
+      !next.tabs[activeTab]
+      .defense[index]
         .skillDescriptions
     ) {
-      next.defense[index]
+      next.tabs[activeTab]
+      .defense[index]
         .skillDescriptions =
           ["", "", "", ""];
     }
   
-    next.defense[index]
+    next.tabs[activeTab]
+    .defense[index]
       .skillDescriptions[skillIndex] = v;
   
     setGuideData(next);
@@ -628,7 +774,8 @@ export default function Page() {
                     ...guideData,
                   };
 
-                  next.defense[
+                  next.tabs[activeTab]
+                  .defense[
                     index
                   ].skills[
                     skillIndex
@@ -690,7 +837,8 @@ export default function Page() {
               ...guideData,
             };
 
-            next.defense[index].tip =
+            next.tabs[activeTab]
+            .defense[index].tip =
               v;
 
             setGuideData(next);
@@ -1185,13 +1333,13 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
               `}
             >
               <Editable
-  value={tab}
+  value={tab.name}
   onChange={(v) => {
     const next = {
       ...guideData,
     };
 
-    next.tabs[index] = v;
+    next.tabs[index].name = v;
 
     setGuideData(next);
   }}
@@ -1276,7 +1424,9 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
             flex flex-col gap-[10px]
           "
         >
-          {guideData.defense.map(
+          {guideData.tabs[
+  activeTab
+]?.defense?.map(
             (
               deck,
               index
@@ -1305,7 +1455,9 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
             pr-[4px]
           "
         >
-          {guideData.attack.map(
+          {guideData.tabs[
+  activeTab
+]?.attack?.map(
             (
               deck,
               index
