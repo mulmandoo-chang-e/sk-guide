@@ -118,8 +118,10 @@ ${
 
       <div className="h-[12px] flex items-center justify-center">
         <Editable
-  value={description}
-  onChange={onDescriptionChange}
+  value={description || ""}
+  onChange={
+    onDescriptionChange || (() => {})
+  }
   className={`
   text-center
 
