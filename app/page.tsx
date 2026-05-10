@@ -547,9 +547,16 @@ export default function Page() {
   }
 
   text-[15px]
+
+  md:text-[20px]
+
   leading-relaxed
 
   w-full
+
+  whitespace-pre-wrap
+
+  break-words
 `}
         />
       </div>
@@ -852,10 +859,17 @@ export default function Page() {
       : "text-black"
   }
 
-  text-[24px]
+  text-[20px]
+
+  md:text-[24px]
+
   leading-relaxed
 
   w-full
+
+  whitespace-pre-wrap
+
+  break-words
 `}
         />
       </div>
