@@ -546,9 +546,9 @@ export default function Page() {
       : "text-black"
   }
 
-  text-[15px]
+  text-[12px]
 
-  md:text-[20px]
+  md:text-[15px]
 
   leading-relaxed
 
