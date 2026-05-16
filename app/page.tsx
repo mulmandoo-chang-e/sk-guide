@@ -8,13 +8,26 @@ import SkillBox from "./components/SkillBox";
 
 import { GuideData } from "./types";
 
-import { db, storage } from "./firebase";
+import {
+  db,
+  storage,
+  auth,
+  provider,
+} from "./firebase";
 
 import {
   ref,
   set,
   onValue,
 } from "firebase/database";
+
+import {
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+
+const ADMIN_UID = "";
 
 const createDeck = (title: string) => ({
   title,
@@ -163,9 +176,6 @@ export default function Page() {
   const [isAdmin, setIsAdmin] =
     useState(false);
 
-  const [password, setPassword] =
-    useState("");
-
   const [darkMode, setDarkMode] =
     useState(false);
 
@@ -188,33 +198,58 @@ export default function Page() {
 
   /* Admin */
   useEffect(() => {
-    const saved =
-      localStorage.getItem(
-        "sk-admin"
+    const unsubscribe =
+      onAuthStateChanged(
+        auth,
+        (user) => {
+          if (
+            user &&
+            user.uid ===
+              ADMIN_UID
+          ) {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+          }
+        }
       );
-
-    if (false) {
-      setIsAdmin(true);
-    }
+  
+    return () => unsubscribe();
   }, []);
 
-  const login = () => {
-    if (password === "991127") {
-      setIsAdmin(true);
+  const login = async () => {
+    try {
+      const result =
+        await signInWithPopup(
+          auth,
+          provider
+        );
 
-      localStorage.setItem(
-        "sk-admin",
-        "true"
-      );
+        console.log(
+          result.user.uid
+        );
+  
+      if (
+        result.user.uid ===
+        ADMIN_UID
+      ) {
+        setIsAdmin(true);
+      } else {
+        alert(
+          "관리자 계정이 아닙니다."
+        );
+  
+        await signOut(auth);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut(auth);
+  
     setIsAdmin(false);
-
-    localStorage.removeItem(
-      "sk-admin"
-    );
   };
 
   /* Save */
@@ -1182,41 +1217,6 @@ shadow-[0_0_30px_rgba(255,0,0,0.08)]
   </>
 ) : (
   <>
-    <input
-      type="password"
-      placeholder="관리자 비밀번호"
-      value={password}
-      onChange={(e) =>
-        setPassword(e.target.value)
-      }
-      className={`
-        px-3 py-1
-
-        rounded-md
-
-        text-[12px]
-
-        border
-
-        ${
-          darkMode
-            ? `
-              bg-black
-
-              border-red-700
-
-              text-white
-            `
-            : `
-              bg-white
-
-              border-gray-300
-
-              text-black
-            `
-        }
-      `}
-    />
 
     <button
       onClick={login}
