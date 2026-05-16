@@ -27,7 +27,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-const ADMIN_UID = "";
+const ADMIN_UID = "BHcMgYVsLvTHRUjJ1SW8TCoBRfW2";
 
 const createDeck = (title: string) => ({
   title,
